@@ -29,7 +29,12 @@ here is the correct output, dont use anything other than this following output e
 """
 
 
-
+OPENAI_API_TYPE = "xxxx" 
+OPENAI_API_VERSION = "xxxx" 
+OPENAI_API_BASE = "xxxx" 
+OPENAI_API_KEY = "xxxx" 
+#GPT3.5 --> Deployment Name: gpt-35-turbo 
+#Embeding Engine —> Deployment Name: text-embedding-ada-002
 
 def get_completion_from_messages(system_message, user_message, model="gpt-35-turbo", temperature=0, max_tokens=500) -> str:
   client = AzureOpenAI(
