@@ -1,0 +1,5 @@
+pandas
+mysql.connector
+pymysql
+streamlit
+openai
