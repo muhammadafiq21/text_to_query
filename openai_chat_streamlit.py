@@ -55,10 +55,10 @@ def get_completion_from_messages(system_message, user_message, model="gpt-35-tur
 
 # connecting database
 cnx = mysql.connector.connect(
-  host=host_name,
-  user=user_name,
-  password=password_name,
-  database=database_name
+  host="xxxx",
+  user="xxxx",
+  password="xxxx",
+  database="xxxx"
 )
 
 # take database schema
@@ -79,26 +79,33 @@ st.title("Azure OpenAI SQL Generator")
 
 # input field for the user to type message
 user_message = st.text_input("Enter your message:")
+tab_titles = ["Result","Query","Reason"]
+tabs = st.tabs(tab_titles)
 
 if user_message:
     try:
         # run the sql query and display the result
         response = get_completion_from_messages(formatted_system_message, user_message)
         json_response = json.loads(response)
-        st.write("Chain of Thought")
         # print chain of thought
-        json_response["chain_of_thought"]
-        st.write("")
-        st.write("")
-        st.write("Answer")
+        with tabs [2]:
+          st.write("Chain of Thought:")
+          json_response["chain_of_thought"]
+        # print sql query
+        query = json_response['query']
+        with tabs [1]:
+          st.write("Generated SQL Query:")
+          st.code(query, language="sql")
+        with tabs [0]:
+          st.write("Answer:")
         # pass the generated query into database connector
-        cursor=cnx.cursor()
-        querys=(json_response['query'])
-        cursor.execute(querys)
-        data = []
-        for row in cursor:
-          data.append(row)
-        df = pd.DataFrame(data, columns=cursor.column_names)
-        df
+          cursor=cnx.cursor()
+          querys=(json_response['query'])
+          cursor.execute(querys)
+          data = []
+          for row in cursor:
+            data.append(row)
+          df = pd.DataFrame(data, columns=cursor.column_names)
+          df
     except Exception as e:
        st.write(f"An error occured: {e}")
